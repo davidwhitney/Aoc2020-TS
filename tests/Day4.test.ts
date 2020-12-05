@@ -2,130 +2,128 @@ import fs from "fs";
 
 describe("Day 4", () => {
 
-    it("FromLine_PassportWithSingleField_CorrectNumberOfFieldsDetected()", () => {
-        let singleLineWithOneEntry = "ecl:gry";
-        var passport = Passport.FromLine(singleLineWithOneEntry);
+    it("FromLine_PassportWithSingleField_CorrectNumberOfFieldsDetected", () => {
+        const singleLineWithOneEntry = "ecl:gry";
+        const passport = Passport.FromLine(singleLineWithOneEntry);
         expect(passport.Fields.size).toBe(1);
     });
 
 
-    it(" FromLine_PassportWithSingleField_Parses()", () => {
-        let singleLineWithOneEntry = "ecl:gry";
-        var passport = Passport.FromLine(singleLineWithOneEntry);
+    it("FromLine_PassportWithSingleField_Parses", () => {
+        const singleLineWithOneEntry = "ecl:gry";
+        const passport = Passport.FromLine(singleLineWithOneEntry);
         expect(passport.Fields.get("ecl")).toBe("gry");
     });
 
 
-    it(" FromLine_PassportWithMultipleFields_Parses()", () => {
-        let multipleValues = "ecl:gry pid:860033327";
-        var passport = Passport.FromLine(multipleValues);
+    it("FromLine_PassportWithMultipleFields_Parses", () => {
+        const multipleValues = "ecl:gry pid:860033327";
+        const passport = Passport.FromLine(multipleValues);
         expect(passport.Fields.size).toBe(2);
     });
 
 
-    it(" FromLine_PassportWithMultipleFieldsWithNewLineSplitter_Parses()", () => {
-        let multipleValues = "ecl:gry\npid:860033327";
-        var passport = Passport.FromLine(multipleValues);
+    it("FromLine_PassportWithMultipleFieldsWithNewLineSplitter_Parses", () => {
+        const multipleValues = "ecl:gry\npid:860033327";
+        const passport = Passport.FromLine(multipleValues);
         expect(passport.Fields.size).toBe(2);
     });
 
 
-    it(" FromFile_GivenOneEntry_Parses()", () => {
-        let singleLineWithOneEntry = "ecl:gry";
-        var passport = Passport.FromFile(singleLineWithOneEntry);
+    it("FromFile_GivenOneEntry_Parses", () => {
+        const singleLineWithOneEntry = "ecl:gry";
+        const passport = Passport.FromFile(singleLineWithOneEntry);
 
         expect(passport.length).toBe(1);
     });
 
 
-    it(" FromFile_GivenMultipleEntry_Parses()", () => {
-        let fileWithTwoEntries = "ecl:gry pid:860033327 eyr:2020 hcl:#fffffd\r\n" +
+    it("FromFile_GivenMultipleEntry_Parses", () => {
+        const fileWithTwoEntries = "ecl:gry pid:860033327 eyr:2020 hcl:#fffffd\r\n" +
             "byr:1937 iyr:2017 cid:147 hgt:183cm\r\n\r\n" +
             "iyr:2013 ecl:amb cid:350 eyr:2023 pid:028048884\r\n" +
             "hcl:#cfa07d byr:1929";
 
-        var passport = Passport.FromFile(fileWithTwoEntries);
+        const passport = Passport.FromFile(fileWithTwoEntries);
 
         expect(passport.length).toBe(2);
     });
 
-    it(" Example1_ContainsAllFields()", () => {
-        let input = "ecl:gry pid:860033327 eyr:2020 hcl:#fffffd\r\nbyr:1937 iyr:2017 cid:147 hgt:183cm\r\n";
-        var passport = Passport.FromFile(input)[0];
+    it("Example1_ContainsAllFields", () => {
+        const input = "ecl:gry pid:860033327 eyr:2020 hcl:#fffffd\r\nbyr:1937 iyr:2017 cid:147 hgt:183cm\r\n";
+        const passport = Passport.FromFile(input)[0];
 
         expect(passport.IsValid).toBe(true);
     });
 
 
-    it(" Example2_MissingHgt()", () => {
-        let input = "iyr:2013 ecl:amb cid:350 eyr:2023 pid:028048884\r\nhcl:#cfa07d byr:1929";
-        var passport = Passport.FromFile(input)[0];
+    it("Example2_MissingHgt", () => {
+        const input = "iyr:2013 ecl:amb cid:350 eyr:2023 pid:028048884\r\nhcl:#cfa07d byr:1929";
+        const passport = Passport.FromFile(input)[0];
 
         expect(passport.IsValid).toBe(false);
     });
 
 
-    it("  Example2_OnlyMissingCID()", () => {
-        let input = "hcl:#ae17e1 iyr:2013\r\neyr:2024\r\necl:brn pid:760753108 byr:1931\r\nhgt:179cm";
-        var passport = Passport.FromFile(input)[0];
+    it("Example2_OnlyMissingCID", () => {
+        const input = "hcl:#ae17e1 iyr:2013\r\neyr:2024\r\necl:brn pid:760753108 byr:1931\r\nhgt:179cm";
+        const passport = Passport.FromFile(input)[0];
 
         expect(passport.IsValid).toBe(true);
     });
 
 
-    it(" Part1()", () => {
-        var input = fs.readFileSync("C:/dev/AOC2020-ts/tests/Day4.txt", "utf-8");
-        var passports = Passport.FromFile(input);
+    it("Part1", () => {
+        const input = fs.readFileSync("./tests/Day4.txt", "utf-8");
+        const passports = Passport.FromFile(input);
 
-        var validCount = passports.filter(p => p.IsValid).length;
+        const validCount = passports.filter(p => p.IsValid).length;
 
         expect(validCount).toBe(200);
     });
 
 
-    it(" Part2_Examples()", () => {
-        var rule = Passport.ContentValidators.filter(x => x.FieldName === "byr")[0];
+    it("Part2_Examples", () => {
+        const rule = Passport.ContentValidators.filter(x => x.FieldName === "byr")[0];
         expect(rule.Validate("2002")).toBe(true);
         expect(rule.Validate("2003")).toBe(false);
 
-        var rule2 = Passport.ContentValidators.filter(x => x.FieldName === "iyr")[0];
+        const rule2 = Passport.ContentValidators.filter(x => x.FieldName === "iyr")[0];
         expect(rule2.Validate("2015")).toBe(true);
         expect(rule2.Validate("2025")).toBe(false);
 
-        var rule3 = Passport.ContentValidators.filter(x => x.FieldName === "eyr")[0];
+        const rule3 = Passport.ContentValidators.filter(x => x.FieldName === "eyr")[0];
         expect(rule3.Validate("2025")).toBe(true);
         expect(rule3.Validate("2035")).toBe(false);
 
-        var rule4 = Passport.ContentValidators.filter(x => x.FieldName === "hgt")[0];
+        const rule4 = Passport.ContentValidators.filter(x => x.FieldName === "hgt")[0];
         expect(rule4.Validate("60in")).toBe(true);
         expect(rule4.Validate("190cm")).toBe(true);
         expect(rule4.Validate("190in")).toBe(false);
         expect(rule4.Validate("190")).toBe(false);
 
-        var rule5 = Passport.ContentValidators.filter(x => x.FieldName === "hcl")[0];
+        const rule5 = Passport.ContentValidators.filter(x => x.FieldName === "hcl")[0];
         expect(rule5.Validate("#123abc")).toBe(true);
         expect(rule5.Validate("#123abz")).toBe(false);
         expect(rule5.Validate("123abc")).toBe(false);
 
-        var rule6 = Passport.ContentValidators.filter(x => x.FieldName === "ecl")[0];
+        const rule6 = Passport.ContentValidators.filter(x => x.FieldName === "ecl")[0];
         expect(rule6.Validate("blah")).toBe(false);
         expect(rule6.Validate("amb")).toBe(true);
 
-        var rule7 = Passport.ContentValidators.filter(x => x.FieldName === "pid")[0];
+        const rule7 = Passport.ContentValidators.filter(x => x.FieldName === "pid")[0];
         expect(rule7.Validate("000000001")).toBe(true);
         expect(rule7.Validate("0123456789")).toBe(false);
     });
 
-
     it("Part2", () => {
-        var input = fs.readFileSync("C:/dev/AOC2020-ts/tests/Day4.txt", "utf-8");
-        var passports = Passport.FromFile(input, Passport.ContentValidators);
+        const input = fs.readFileSync("./tests/Day4.txt", "utf-8");
+        const passports = Passport.FromFile(input, Passport.ContentValidators);
 
-        var validCount = passports.filter(p => p.IsValid).length;
+        const validCount = passports.filter(p => p.IsValid).length;
 
         expect(validCount).toBe(116);
     });
-
 });
 
 type Validator = (textValue: string) => boolean;
@@ -154,7 +152,7 @@ class Rule {
             return false;
         }
 
-        var value = allFields.get(this.FieldName);
+        const value = allFields.get(this.FieldName);
         return this.Validate(value);
     }
 }
@@ -174,15 +172,15 @@ class Passport {
 
     public static FromFile(passportFile: string, withValidators: Rule[] = null): Passport[] {
         passportFile = passportFile.replace(/\r\n\r\n/g, "\n\n");
-        var passportsLines = passportFile.split("\n\n");
+        const passportsLines = passportFile.split("\n\n");
         return passportsLines.map(l => Passport.FromLine(l.trim(), withValidators));
     }
 
     public static FromLine(passportFields: string, withValidators: Rule[] = null): Passport {
         passportFields = passportFields.trim().replace(/ /g, "\r\n").replace(/\r\n/g, "\n");
-        var fieldsAndValues = passportFields.split("\n");
+        const fieldsAndValues = passportFields.split("\n");
 
-        var dic = new Map<string, string>();
+        const dic = new Map<string, string>();
         fieldsAndValues.map(pair => pair.trim().split(':')).forEach(parts => {
             dic.set(parts[0], parts[1]);
         });
@@ -209,8 +207,8 @@ class Passport {
         }));
 
         validators.push(new Rule("hgt", t => {
-            var regex = new RegExp("^([0-9]+)(cm|in)$");
-            var matches = regex.exec(t);
+            const regex = new RegExp("^([0-9]+)(cm|in)$");
+            const matches = regex.exec(t);
 
             if (matches == null || matches.length === 0) {
                 return false;
@@ -236,7 +234,7 @@ class Passport {
     };
 
     public static get PresenceValidators(): Rule[] {
-        var map = [];
+        const map = [];
         map.push(new Rule("byr", t => true));
         map.push(new Rule("iyr", t => true));
         map.push(new Rule("eyr", t => true));

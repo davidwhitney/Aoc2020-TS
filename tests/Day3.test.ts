@@ -2,7 +2,7 @@ import fs from "fs";
 
 describe("Day3", () => {
     it("Example", () => {
-        var terrain = [
+        const terrain = [
             "..##.......",
             "#...#...#..",
             ".#....#..#.",
@@ -16,25 +16,23 @@ describe("Day3", () => {
             ".#..#...#.#",
         ];
 
-        var result = CountTrees(terrain, 3, 1);
+        const result = countTrees(terrain, 3, 1);
 
         expect(result).toBe(7);
     });
 
-
     it("Part1", () => {
-        var terrain = fs.readFileSync("C:/dev/AOC2020-ts/tests/Day3Input.txt", "utf-8").split("\r\n").map(l => l.trim());
+        const terrain = fs.readFileSync("./tests/Day3Input.txt", "utf-8").split("\r\n").map(l => l.trim());
 
-        var result = CountTrees(terrain, 3, 1);
+        const result = countTrees(terrain, 3, 1);
 
         expect(result).toBe(262);
     });
 
-
     it("Part2", () => {
-        var terrain = fs.readFileSync("C:/dev/AOC2020-ts/tests/Day3Input.txt", "utf-8").split("\r\n").map(l => l.trim());
+        const terrain = fs.readFileSync("./tests/Day3Input.txt", "utf-8").split("\r\n").map(l => l.trim());
 
-        var slopes = [
+        const slopes = [
             [1, 1],
             [3, 1],
             [5, 1],
@@ -42,27 +40,24 @@ describe("Day3", () => {
             [1, 2],
         ];
 
-        var counts = slopes.map(slope => CountTrees(terrain, slope[0], slope[1]));
+        const counts = slopes.map(slope => countTrees(terrain, slope[0], slope[1]));
 
-        var total = counts.reduce((previousValue, currentValue, currentIndex) => {
+        const total = counts.reduce((previousValue, currentValue, currentIndex) => {
             return previousValue * currentValue;
         });
 
         expect(total).toBe(2698900776);
     });
-
 });
 
+function countTrees(terrain: string[], slopeX: number, slopeY: number): number {
+    let currentY = 0;
+    let currentX = 0;
 
-
-function CountTrees(terrain: string[], slopeX: number, slopeY: number): number {
-    var currentY = 0;
-    var currentX = 0;
-
-    var trees = 0;
+    let trees = 0;
 
     while (currentY < terrain.length) {
-        var currentLocValue = terrain[currentY][currentX];
+        const currentLocValue = terrain[currentY][currentX];
         if (currentLocValue == '#') {
             trees++;
         }

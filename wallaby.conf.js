@@ -12,7 +12,6 @@ module.exports = function (wallaby) {
 
         tests: [
             '/**/*.test.[tj]s',
-            '/**/*.txt',
             '!/tests/acceptance/**/*.[tj]s',
             '!/node_modules/**/*.[tj]s'
         ],
